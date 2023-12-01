@@ -1,0 +1,33 @@
+package backend.Projetcertification.dto.mapper;
+
+import backend.Projetcertification.dto.CanalDTO;
+import backend.Projetcertification.dto.CanalPutDto;
+import backend.Projetcertification.dto.UtilisateurDTO;
+import backend.Projetcertification.dto.UtilisateurPutDto;
+import backend.Projetcertification.entity.Canal;
+import backend.Projetcertification.entity.Utilisateur;
+
+public class CanalMapper {
+    public static CanalDTO entityToDto(Canal entity) {
+        CanalDTO canalDTO = new CanalDTO();
+        canalDTO.setNomCanal(entity.getNomCanal());
+        canalDTO.setEstActif(entity.isEstActif());
+        canalDTO.setEstLeGeneral(entity.isEstGeneral());
+        return canalDTO;
+    }
+    public static Canal dtoToEntity(CanalDTO canalDTO) {
+        Canal canal = new Canal();
+        canal.setNomCanal(canalDTO.getNomCanal());
+        canal.setEstActif(canalDTO.isEstActif());
+        canal.setEstGeneral(canalDTO.isEstLeGeneral());
+        return canal;
+    }
+
+    public static CanalDTO dtoToDtoPut(CanalPutDto  entity) {
+        CanalDTO canalDTO = new CanalDTO();
+        canalDTO.setNomCanal(entity.getNomCanal());
+        canalDTO.setEstLeGeneral(entity.isEstLeGeneral());
+        canalDTO.setEstActif(entity.isEstActif());
+        return canalDTO;
+    }
+}
