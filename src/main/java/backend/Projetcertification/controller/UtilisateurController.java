@@ -47,4 +47,23 @@ public class UtilisateurController {
 
     }
 
+    @PatchMapping("{id}")
+    public ResponseEntity<?> updateUtilisateur(@RequestBody UtilisateurPutDto utilisateurPutDto, @PathVariable Integer id) {
+
+        if (!utilisateurPutDto.getId().equals(id))
+            return ResponseEntity.status(404).body("L'id de l'url est différente de celle envoyer dans le body");
+
+        Optional<Utilisateur> optional = utilisateurService.getUtilisateurById(id);
+        if (optional.isEmpty()) {
+            return ResponseEntity.status(404).body("Le L'utilisateur est inexistant");
+        }
+        UtilisateurDTO utilisateurDto = utilisateurService.updateUtilisateur(utilisateurPutDto, id);
+        if (utilisateurDto != null) {
+            return ResponseEntity.ok(utilisateurDto);
+        } else {
+            return ResponseEntity.status(404).body("L'utilisateur a modifier n'a pas été trouver");
+        }
+    }
+
+
 }

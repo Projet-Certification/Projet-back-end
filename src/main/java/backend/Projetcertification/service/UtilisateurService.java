@@ -33,6 +33,21 @@ public class UtilisateurService {
         return utilisateurDTO;
     }
 
+    public UtilisateurDTO updateUtilisateur(UtilisateurPutDto newUtilisateurPutDto, Integer id) {
+        Optional<Utilisateur> op = getUtilisateurById(id);
+        if (op.isPresent()) {
+            Utilisateur utilisateur = op.get();
+            utilisateur.setNotNull(newUtilisateurPutDto);
+
+            utilisateurRepository.save(utilisateur);
+            // Convertir le putDto de l'utilisateur modifier en dto normal,pour afficher que le pseudo et non l'id avec
+            UtilisateurDTO utilisateurDTO = UtilisateurMapper.dtoToDtoPut(newUtilisateurPutDto);
+            return utilisateurDTO;
+        }
+        return null;
+    }
+
+
     public boolean champsVidePost(UtilisateurDTO utilisateurDTO) {
         if (utilisateurDTO.getPseudo() == null || utilisateurDTO.getPseudo().isBlank()) {
             return true;
