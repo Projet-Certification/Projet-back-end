@@ -46,7 +46,13 @@ public class UtilisateurService {
         }
         return null;
     }
-
+    public boolean deleteUtilisateur(Integer id) {
+        if (getUtilisateurById(id).isPresent()) {
+            utilisateurRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 
     public boolean champsVidePost(UtilisateurDTO utilisateurDTO) {
         if (utilisateurDTO.getPseudo() == null || utilisateurDTO.getPseudo().isBlank()) {
