@@ -65,5 +65,12 @@ public class UtilisateurController {
         }
     }
 
-
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteUtilisateur(@PathVariable("id") Integer id) {
+        if (utilisateurService.deleteUtilisateur(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(404).body("Utilisateur non trouvé");
+        }
+    }
 }
