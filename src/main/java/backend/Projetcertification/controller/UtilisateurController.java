@@ -55,8 +55,9 @@ public class UtilisateurController {
 
         Optional<Utilisateur> optional = utilisateurService.getUtilisateurById(id);
         if (optional.isEmpty()) {
-            return ResponseEntity.status(404).body("Le L'utilisateur est inexistant");
+            return ResponseEntity.status(404).body("L'utilisateur est inexistant");
         }
+
         UtilisateurDTO utilisateurDto = utilisateurService.updateUtilisateur(utilisateurPutDto, id);
         if (utilisateurDto != null) {
             return ResponseEntity.ok(utilisateurDto);
@@ -73,4 +74,5 @@ public class UtilisateurController {
             return ResponseEntity.status(404).body("Utilisateur non trouvé");
         }
     }
+
 }
