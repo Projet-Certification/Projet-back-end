@@ -27,9 +27,12 @@ public class Canal {
     private List<Message> messages = new ArrayList<>();
 
     public Canal() {
+        this.estActif = true;
+        this.estGeneral = false;
     }
 
     public Canal(boolean estGeneral, boolean estActif, String nomCanal) {
+        this();
         this.estGeneral = estGeneral;
         this.estActif = estActif;
         this.nomCanal = nomCanal;
