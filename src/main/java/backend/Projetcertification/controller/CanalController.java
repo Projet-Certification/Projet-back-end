@@ -51,4 +51,12 @@ public class CanalController {
             return ResponseEntity.status(404).body("Le canal a modifier n'a pas été trouver");
         }
     }
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteCanal(@PathVariable("id") Integer id) {
+        if (canalService.deleteCanal(id) != null) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(404).body("Canal non trouvé");
+        }
+    }
 }

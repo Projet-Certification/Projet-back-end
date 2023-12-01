@@ -24,7 +24,15 @@ public class CanalService {
     public Canal updateCanal(Canal canal) {
        return canalRepository.save(canal);
     }
-    public void deleteCanal(Integer id){
-        canalRepository.deleteById(id);
+
+    public Canal deleteCanal(Integer id) {
+        Optional<Canal> find = canalRepository.findById(id);
+        if (find.isPresent()) {
+            Canal canal = find.get();
+            canalRepository.deleteById(canal.getId());
+            return canal;
+        }
+        return null;
+
     }
 }
