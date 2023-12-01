@@ -27,6 +27,17 @@ public class UtilisateurService {
         return utilisateurRepository.findById(id);
     }
 
+    public UtilisateurDTO addUtilisateur(UtilisateurDTO utilisateurDTO) {
+        Utilisateur utilisateur = UtilisateurMapper.dtoToEntity(utilisateurDTO);
+        utilisateurRepository.save(utilisateur);
+        return utilisateurDTO;
+    }
 
+    public boolean champsVidePost(UtilisateurDTO utilisateurDTO) {
+        if (utilisateurDTO.getPseudo() == null || utilisateurDTO.getPseudo().isBlank()) {
+            return true;
+        }
+        return false;
+    }
 
 }

@@ -35,4 +35,16 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurDTOS);
     }
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public ResponseEntity<?> addUtilisateur(@RequestBody UtilisateurDTO newUtilisateur) {
+        if (utilisateurService.champsVidePost(newUtilisateur)) {
+            return ResponseEntity.badRequest().body("Le pseudo n'a pas été rempli");
+        }
+        UtilisateurDTO utilisateurDto = utilisateurService.addUtilisateur(newUtilisateur);
+
+        return ResponseEntity.ok(utilisateurDto);
+
+    }
+
 }
