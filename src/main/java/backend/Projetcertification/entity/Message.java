@@ -23,5 +23,53 @@ public class Message {
     @JoinColumn(name = "canal_id")
     private Canal canal;
 
-    
+    public Message() {
+    }
+
+    public Message(String contenuMessage, LocalDateTime dateMessage, Utilisateur utilisateur, Canal canal) {
+        this.contenuMessage = contenuMessage;
+        this.dateMessage = dateMessage;
+        this.utilisateur = utilisateur;
+        this.canal = canal;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getContenuMessage() {
+        return contenuMessage;
+    }
+
+    public void setContenuMessage(String contenuMessage) {
+        this.contenuMessage = contenuMessage;
+    }
+
+    public LocalDateTime getDateMessage() {
+        return dateMessage;
+    }
+
+    public void setDateMessage(LocalDateTime dateMessage) {
+        this.dateMessage = dateMessage;
+    }
+
+    public Utilisateur getUtilisateur() {
+        return utilisateur;
+    }
+
+    public void setUtilisateur(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+    }
+
+    public Canal getCanal() {
+        return canal;
+    }
+
+    public void setCanal(Canal canal) {
+        this.canal = canal;
+    }
 }

@@ -1,8 +1,6 @@
 package backend.Projetcertification.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.aspectj.bridge.Message;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +22,16 @@ public class Canal {
     private String nomCanal;
 
     @OneToMany(mappedBy = "canal", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Message> messages = new ArrayList<>();
+
+    public Canal() {
+    }
+
+    public Canal(boolean estGeneral, boolean estActif, String nomCanal) {
+        this.estGeneral = estGeneral;
+        this.estActif = estActif;
+        this.nomCanal = nomCanal;
+    }
 
     public Integer getId() {
         return id;
@@ -69,14 +75,5 @@ public class Canal {
     public void addMessage(Message message) {
         messages.add(message);
         message.setCanal(this);
-    }
-
-    public void setNotNull(Canal newCanal) {
-        if (newCanal.getNomCanal() != null) {
-            this.nomCanal = newCanal.getNomCanal();
-        }
-        if (newCanal.getMessages() != null) {
-            this.messages = newCanal.getMessages();
-        }
     }
 }
