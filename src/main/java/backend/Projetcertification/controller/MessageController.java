@@ -1,7 +1,10 @@
 package backend.Projetcertification.controller;
 
+import backend.Projetcertification.dto.MessageDTO;
 import backend.Projetcertification.dto.UtilisateurDTO;
 import backend.Projetcertification.dto.UtilisateurPutDto;
+import backend.Projetcertification.dto.mapper.MessageMapper;
+import backend.Projetcertification.dto.mapper.UtilisateurMapper;
 import backend.Projetcertification.entity.Message;
 import backend.Projetcertification.entity.Utilisateur;
 import backend.Projetcertification.service.CanalService;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,30 +27,40 @@ public class MessageController {
     MessageService messageService;
 
     @GetMapping
-    public ResponseEntity<List<Message>> getAll() {
-        return ResponseEntity.ok(messageService.getMessages());
+    public ResponseEntity<List<MessageDTO>> getAll() {
+        List<Message> messages = messageService.getMessages();
+        List<MessageDTO> messageDTOS = new ArrayList<>();
+
+        for (Message entity : messages) {
+            MessageDTO messageDTO = MessageMapper.entityToDto(entity);
+            messageDTOS.add(messageDTO);
+        }
+        return ResponseEntity.ok(messageDTOS);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getMessageById(@PathVariable Integer id) {
-        Optional<Message> optionalMessage = messageService.getMessageByIdOptional(id);
+
+        Optional<Message> optionalMessage = messageService.getMessageById(id);
         if (optionalMessage.isPresent()) {
-            return ResponseEntity.ok(optionalMessage.get());
-        }else{
+            MessageDTO messageDTO = MessageMapper.entityToDto(optionalMessage.get());
+
+            return ResponseEntity.ok(messageDTO);
+        } else {
             return ResponseEntity.status(404).body("Le message est inexistant");
         }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> addMessage(@RequestBody Message message) {
+    public ResponseEntity<?> addMessage(@RequestBody MessageDTO messageDTO) {
 
-        if (messageService.champsVidePost(message)) {
+        if (messageService.champsVidePost(messageDTO)) {
             return ResponseEntity.badRequest().body("L'un des champs n'a pas été rempli");
         }
 
-        messageService.addMessage(message);
-        return ResponseEntity.ok(message);
+        messageService.addMessage(messageDTO);
+        return ResponseEntity.ok(messageDTO);
     }
 
     @PatchMapping("{id}")
@@ -55,7 +69,7 @@ public class MessageController {
         if (!message.getId().equals(id))
             return ResponseEntity.badRequest().body("L'id de l'url est différente de celle envoyer dans le body");
 
-        if (!messageService.getMessageByIdOptional(id).isPresent()) {
+        if (!messageService.getMessageById(id).isPresent()) {
             return ResponseEntity.status(404).body("Le message est inexistant");
         }
         Message updatedMessage = messageService.updateMessage(message, id);

@@ -23,7 +23,6 @@ public class Canal {
     private String nomCanal;
 
     @OneToMany(mappedBy = "canal", cascade = CascadeType.ALL)
-    @JsonIgnore
     private List<Message> messages = new ArrayList<>();
 
     public Canal() {
@@ -31,10 +30,8 @@ public class Canal {
         this.estGeneral = false;
     }
 
-    public Canal(boolean estGeneral, boolean estActif, String nomCanal) {
+    public Canal(String nomCanal) {
         this();
-        this.estGeneral = estGeneral;
-        this.estActif = estActif;
         this.nomCanal = nomCanal;
     }
 

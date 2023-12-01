@@ -26,10 +26,9 @@ public class Message {
         this.dateMessage = LocalDateTime.now();
     }
 
-    public Message(String contenuMessage, LocalDateTime dateMessage, Utilisateur utilisateur, Canal canal) {
+    public Message(String contenuMessage, Utilisateur utilisateur, Canal canal) {
         this();
         this.contenuMessage = contenuMessage;
-        this.dateMessage = dateMessage;
         this.utilisateur = utilisateur;
         this.canal = canal;
     }
