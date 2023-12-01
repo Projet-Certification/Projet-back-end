@@ -3,6 +3,7 @@ package backend.Projetcertification.controller;
 import backend.Projetcertification.dto.UtilisateurDTO;
 import backend.Projetcertification.dto.UtilisateurPutDto;
 import backend.Projetcertification.dto.mapper.UtilisateurMapper;
+import backend.Projetcertification.entity.Message;
 import backend.Projetcertification.entity.Utilisateur;
 import backend.Projetcertification.service.UtilisateurService;
 import jdk.jshell.execution.Util;
@@ -35,6 +36,19 @@ public class UtilisateurController {
         return ResponseEntity.ok(utilisateurDTOS);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<?> getUtilisateurById(@PathVariable Integer id) {
+
+        Optional<Utilisateur> optionalMessage = utilisateurService.getUtilisateurById(id);
+        if (optionalMessage.isPresent()) {
+            UtilisateurDTO utilisateurDto = UtilisateurMapper.entityToDto(optionalMessage.get());
+
+            return ResponseEntity.ok(utilisateurDto);
+        } else {
+            return ResponseEntity.status(404).body("L'utilisateur est inexistant");
+        }
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> addUtilisateur(@RequestBody UtilisateurDTO newUtilisateur) {
@@ -48,7 +62,8 @@ public class UtilisateurController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<?> updateUtilisateur(@RequestBody UtilisateurPutDto utilisateurPutDto, @PathVariable Integer id) {
+    public ResponseEntity<?> updateUtilisateur(@RequestBody UtilisateurPutDto
+                                                       utilisateurPutDto, @PathVariable Integer id) {
 
         if (!utilisateurPutDto.getId().equals(id))
             return ResponseEntity.status(404).body("L'id de l'url est différente de celle envoyer dans le body");
