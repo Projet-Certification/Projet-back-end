@@ -18,7 +18,6 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "utilisateur_id")
     private Utilisateur utilisateur;
-
     @ManyToOne
     @JoinColumn(name = "canal_id")
     private Canal canal;
