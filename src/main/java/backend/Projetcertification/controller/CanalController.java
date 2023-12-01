@@ -33,4 +33,22 @@ public class CanalController {
         } else
             return ResponseEntity.notFound().build();
     }
+
+    @PatchMapping("{id}")
+    public ResponseEntity<?> updateCanal(@RequestBody Canal CanalPatch, @PathVariable Integer id) {
+
+        if (!CanalPatch.getId().equals(id))
+            return ResponseEntity.status(404).body("L'id de l'url est différente de celle envoyer dans le body");
+
+        Optional<Canal> optional = canalService.getCanalById(id);
+        if (optional.isEmpty()) {
+            return ResponseEntity.status(404).body("Le canal est inexistant");
+        }
+        Canal utilisateurDto = canalService.updateCanal(CanalPatch);
+        if (CanalPatch != null) {
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.status(404).body("Le canal a modifier n'a pas été trouver");
+        }
+    }
 }

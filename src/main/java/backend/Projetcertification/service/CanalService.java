@@ -21,8 +21,8 @@ public class CanalService {
     public void addCanal(Canal canal){
         canalRepository.save(canal);
     }
-    public void updateCanal(Canal canal) {
-        canalRepository.save(canal);
+    public Canal updateCanal(Canal canal) {
+       return canalRepository.save(canal);
     }
     public void deleteCanal(Integer id){
         canalRepository.deleteById(id);
