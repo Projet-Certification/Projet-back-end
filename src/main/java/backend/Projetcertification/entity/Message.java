@@ -23,9 +23,11 @@ public class Message {
     private Canal canal;
 
     public Message() {
+        this.dateMessage = LocalDateTime.now();
     }
 
     public Message(String contenuMessage, LocalDateTime dateMessage, Utilisateur utilisateur, Canal canal) {
+        this();
         this.contenuMessage = contenuMessage;
         this.dateMessage = dateMessage;
         this.utilisateur = utilisateur;
@@ -70,5 +72,17 @@ public class Message {
 
     public void setCanal(Canal canal) {
         this.canal = canal;
+    }
+
+    public void setNotNull(Message newMessage) {
+        if (newMessage.getContenuMessage() != null) {
+            this.contenuMessage = newMessage.getContenuMessage();
+        }
+        if (newMessage.getCanal() != null) {
+            this.canal = newMessage.getCanal();
+        }
+        if (newMessage.getUtilisateur() != null) {
+            this.utilisateur = newMessage.getUtilisateur();
+        }
     }
 }
