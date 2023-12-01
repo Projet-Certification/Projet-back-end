@@ -22,27 +22,36 @@ public class MessageService {
         return messageRepository.findAll();
     }
 
-    public Optional<Message> getMessageById(Integer id) {
+    public Optional<Message> getMessageByIdOptional(Integer id) {
         return messageRepository.findById(id);
     }
 
     public void addMessage(Message message) {
         messageRepository.save(message);
     }
+
     public Message updateMessage(Message newMessage, Integer id) {
-        Optional<Message> op = getMessageById(id);
+        Optional<Message> op = getMessageByIdOptional(id);
         if (op.isPresent()) {
             Message message = op.get();
             message.setNotNull(newMessage);
-
             messageRepository.save(message);
 
             return newMessage;
         }
         return null;
     }
+
+    public boolean deleteMessage(Integer id) {
+        if (getMessageByIdOptional(id).isPresent()) {
+            messageRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
+
     public boolean champsVidePost(Message message) {
-        if (message.getContenuMessage() == null || message.getUtilisateur() == null ||  message.getCanal() == null) {
+        if (message.getContenuMessage() == null || message.getUtilisateur() == null || message.getCanal() == null) {
             return true;
         }
         return false;

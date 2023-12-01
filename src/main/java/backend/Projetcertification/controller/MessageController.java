@@ -23,13 +23,23 @@ public class MessageController {
     MessageService messageService;
 
     @GetMapping
-    public ResponseEntity<List<Message>> getAll(){
+    public ResponseEntity<List<Message>> getAll() {
         return ResponseEntity.ok(messageService.getMessages());
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<?> getMessageById(@PathVariable Integer id) {
+        Optional<Message> optionalMessage = messageService.getMessageByIdOptional(id);
+        if (optionalMessage.isPresent()) {
+            return ResponseEntity.ok(optionalMessage.get());
+        }else{
+            return ResponseEntity.status(404).body("Le message est inexistant");
+        }
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> addMessage(@RequestBody Message message){
+    public ResponseEntity<?> addMessage(@RequestBody Message message) {
 
         if (messageService.champsVidePost(message)) {
             return ResponseEntity.badRequest().body("L'un des champs n'a pas été rempli");
@@ -43,17 +53,25 @@ public class MessageController {
     public ResponseEntity<?> updateMessage(@RequestBody Message message, @PathVariable Integer id) {
 
         if (!message.getId().equals(id))
-            return ResponseEntity.status(404).body("L'id de l'url est différente de celle envoyer dans le body");
+            return ResponseEntity.badRequest().body("L'id de l'url est différente de celle envoyer dans le body");
 
-        Optional<Message> optional = messageService.getMessageById(id);
-        if (optional.isEmpty()) {
+        if (!messageService.getMessageByIdOptional(id).isPresent()) {
             return ResponseEntity.status(404).body("Le message est inexistant");
         }
         Message updatedMessage = messageService.updateMessage(message, id);
         if (updatedMessage != null) {
             return ResponseEntity.ok(updatedMessage);
         } else {
-            return ResponseEntity.status(404).body("Le message a modifier n'a pas été trouver");
+            return ResponseEntity.badRequest().body("Le message n'a pas pu être modifier");
+        }
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> deleteMessage(@PathVariable("id") Integer id) {
+        if (messageService.deleteMessage(id)) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.status(404).body("Le message n'a pas été trouvé");
         }
     }
 }

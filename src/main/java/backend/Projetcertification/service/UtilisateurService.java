@@ -41,11 +41,12 @@ public class UtilisateurService {
 
             utilisateurRepository.save(utilisateur);
             // Convertir le putDto de l'utilisateur modifier en dto normal,pour afficher que le pseudo et non l'id avec
-            UtilisateurDTO utilisateurDTO = UtilisateurMapper.dtoToDtoPut(newUtilisateurPutDto);
+            UtilisateurDTO utilisateurDTO = UtilisateurMapper.putDtoToDto(newUtilisateurPutDto);
             return utilisateurDTO;
         }
         return null;
     }
+
     public boolean deleteUtilisateur(Integer id) {
         if (getUtilisateurById(id).isPresent()) {
             utilisateurRepository.deleteById(id);
