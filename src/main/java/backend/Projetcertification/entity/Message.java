@@ -1,5 +1,6 @@
 package backend.Projetcertification.entity;
 
+import backend.Projetcertification.dto.MessagePutDTO;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -73,15 +74,9 @@ public class Message {
         this.canal = canal;
     }
 
-    public void setNotNull(Message newMessage) {
-        if (newMessage.getContenuMessage() != null) {
-            this.contenuMessage = newMessage.getContenuMessage();
-        }
-        if (newMessage.getCanal() != null) {
-            this.canal = newMessage.getCanal();
-        }
-        if (newMessage.getUtilisateur() != null) {
-            this.utilisateur = newMessage.getUtilisateur();
+    public void setNotNull(MessagePutDTO newMessagePutDTO) {
+        if (newMessagePutDTO.getContenuMessage() != null) {
+            this.contenuMessage = newMessagePutDTO.getContenuMessage();
         }
     }
 }

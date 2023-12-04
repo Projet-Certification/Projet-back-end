@@ -2,12 +2,20 @@ package backend.Projetcertification.dto;
 
 import java.time.LocalDateTime;
 
-public class MessageDTO {
-
+public class MessagePutDTO {
+    private Integer id;
     private String contenuMessage;
     private LocalDateTime dateMessage;
     private Integer idUtilisateur;
     private Integer idCanal;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getContenuMessage() {
         return contenuMessage;

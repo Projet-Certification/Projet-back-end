@@ -1,15 +1,10 @@
 package backend.Projetcertification.controller;
 
 import backend.Projetcertification.dto.MessageDTO;
-import backend.Projetcertification.dto.UtilisateurDTO;
-import backend.Projetcertification.dto.UtilisateurPutDto;
+import backend.Projetcertification.dto.MessagePutDTO;
 import backend.Projetcertification.dto.mapper.MessageMapper;
-import backend.Projetcertification.dto.mapper.UtilisateurMapper;
 import backend.Projetcertification.entity.Message;
-import backend.Projetcertification.entity.Utilisateur;
-import backend.Projetcertification.service.CanalService;
 import backend.Projetcertification.service.MessageService;
-import backend.Projetcertification.service.UtilisateurService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,30 +49,26 @@ public class MessageController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> addMessage(@RequestBody MessageDTO messageDTO) {
-
-        if (messageService.champsVidePost(messageDTO)) {
-            return ResponseEntity.badRequest().body("L'un des champs n'a pas été rempli");
+        List<String> champsManquants = messageService.champsVidePost(messageDTO);
+        if (!champsManquants.isEmpty()) {
+            return ResponseEntity.badRequest().body("L'un des champs n'a pas été rempli " + champsManquants);
         }
-
-        messageService.addMessage(messageDTO);
-        return ResponseEntity.ok(messageDTO);
+        // Envoie en réponse le dto à nous en retour de la méthode addMessage
+        return ResponseEntity.ok(messageService.addMessage(messageDTO));
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<?> updateMessage(@RequestBody Message message, @PathVariable Integer id) {
+    public ResponseEntity<?> updateMessage(@RequestBody MessagePutDTO messagePutDTO, @PathVariable Integer id) {
 
-        if (!message.getId().equals(id))
+        if (!messagePutDTO.getId().equals(id))
             return ResponseEntity.badRequest().body("L'id de l'url est différente de celle envoyer dans le body");
 
         if (!messageService.getMessageById(id).isPresent()) {
             return ResponseEntity.status(404).body("Le message est inexistant");
         }
-        Message updatedMessage = messageService.updateMessage(message, id);
-        if (updatedMessage != null) {
-            return ResponseEntity.ok(updatedMessage);
-        } else {
-            return ResponseEntity.badRequest().body("Le message n'a pas pu être modifier");
-        }
+
+        MessageDTO messageDTO = messageService.updateMessage(messagePutDTO, id);
+        return ResponseEntity.ok(messageDTO);
     }
 
     @DeleteMapping("{id}")

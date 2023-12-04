@@ -1,10 +1,8 @@
 package backend.Projetcertification.dto.mapper;
 
 import backend.Projetcertification.dto.MessageDTO;
-import backend.Projetcertification.dto.UtilisateurDTO;
-import backend.Projetcertification.dto.UtilisateurPutDto;
+import backend.Projetcertification.dto.MessagePutDTO;
 import backend.Projetcertification.entity.Message;
-import backend.Projetcertification.entity.Utilisateur;
 
 public class MessageMapper {
 
@@ -20,6 +18,7 @@ public class MessageMapper {
 
         return messageDTO;
     }
+
     //Convertir le dto en entité
     public static Message dtoToEntity(MessageDTO messageDTO) {
         Message message = new Message();
@@ -28,11 +27,4 @@ public class MessageMapper {
 
         return message;
     }
-
-    // Convertir le dto put de l'utilisateur (avec l'id) en dto de l'utilisateur (sans l'id)
-//    public static UtilisateurDTO putDtoToDto(UtilisateurPutDto entity) {
-//        UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
-//        utilisateurDTO.setPseudo(entity.getPseudo());
-//        return utilisateurDTO;
-//    }
 }

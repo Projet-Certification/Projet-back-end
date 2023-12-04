@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +33,6 @@ public class CanalController {
         } else
             return ResponseEntity.notFound().build();
     }
-
     @PatchMapping("{id}")
     public ResponseEntity<?> updateCanal(@RequestBody Canal CanalPatch, @PathVariable Integer id) {
 
@@ -47,7 +45,7 @@ public class CanalController {
         }
         Canal utilisateurDto = canalService.updateCanal(CanalPatch);
         if (CanalPatch != null) {
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(utilisateurDto);
         } else {
             return ResponseEntity.status(404).body("Le canal a modifier n'a pas été trouver");
         }

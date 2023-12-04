@@ -1,7 +1,6 @@
 package backend.Projetcertification.entity;
 
-import backend.Projetcertification.dto.UtilisateurDTO;
-import backend.Projetcertification.dto.UtilisateurPutDto;
+import backend.Projetcertification.dto.UtilisateurPutDTO;
 import jakarta.persistence.*;
 
 @Entity
@@ -38,7 +37,7 @@ public class Utilisateur {
         this.pseudo = pseudo;
     }
 
-    public void setNotNull(UtilisateurPutDto newUtilisateurPutDto) {
+    public void setNotNull(UtilisateurPutDTO newUtilisateurPutDto) {
         if (newUtilisateurPutDto.getPseudo() != null) {
             this.pseudo = newUtilisateurPutDto.getPseudo();
         }

@@ -1,6 +1,5 @@
 package backend.Projetcertification.dto;
 
-import jakarta.persistence.Column;
 
 public class UtilisateurDTO {
 
@@ -13,4 +12,5 @@ public class UtilisateurDTO {
     public void setPseudo(String pseudo) {
         this.pseudo = pseudo;
     }
+
 }

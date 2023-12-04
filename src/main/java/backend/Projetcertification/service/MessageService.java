@@ -1,19 +1,16 @@
 package backend.Projetcertification.service;
 
 import backend.Projetcertification.dto.MessageDTO;
-import backend.Projetcertification.dto.UtilisateurDTO;
-import backend.Projetcertification.dto.UtilisateurPutDto;
+import backend.Projetcertification.dto.MessagePutDTO;
 import backend.Projetcertification.dto.mapper.MessageMapper;
-import backend.Projetcertification.dto.mapper.UtilisateurMapper;
 import backend.Projetcertification.entity.Canal;
 import backend.Projetcertification.entity.Message;
 import backend.Projetcertification.entity.Utilisateur;
-import backend.Projetcertification.repository.CanalRepository;
 import backend.Projetcertification.repository.MessageRepository;
-import backend.Projetcertification.repository.UtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +23,8 @@ public class MessageService {
     UtilisateurService utilisateurService;
     @Autowired
     CanalService canalService;
+
+    // Récupérer tous les messages
     public List<Message> getMessages() {
         return messageRepository.findAll();
     }
@@ -35,9 +34,11 @@ public class MessageService {
     }
 
     public MessageDTO addMessage(MessageDTO newMessageDTO) {
+        // Conversion du dto en entité Message
         Message message = MessageMapper.dtoToEntity(newMessageDTO);
-        System.out.println("L'heure est là " + message.getDateMessage());
+        // Entité Utilisateur
         Optional<Utilisateur> optionUtilisateur = utilisateurService.getUtilisateurById(newMessageDTO.getIdUtilisateur());
+        // Entité Canal
         Optional<Canal> optionCanal = canalService.getCanalById(newMessageDTO.getIdCanal());
 
         if(optionUtilisateur.isPresent()){
@@ -48,18 +49,34 @@ public class MessageService {
         }
 
         Message message1 = messageRepository.save(message);
+
+        //Rénvoie du dto afin
         MessageDTO messageDto = MessageMapper.entityToDto(message1);
         return messageDto;
     }
 
-    public Message updateMessage(Message newMessage, Integer id) {
+    public MessageDTO updateMessage(MessagePutDTO newMessagePutDto, Integer id) {
         Optional<Message> op = getMessageById(id);
         if (op.isPresent()) {
             Message message = op.get();
-            message.setNotNull(newMessage);
-            messageRepository.save(message);
+            message.setNotNull(newMessagePutDto);
 
-            return newMessage;
+            // Entité Utilisateur
+            Optional<Utilisateur> optionUtilisateur = utilisateurService.getUtilisateurById(newMessagePutDto.getIdUtilisateur());
+            // Entité Canal
+            Optional<Canal> optionCanal = canalService.getCanalById(newMessagePutDto.getIdCanal());
+
+            if(optionUtilisateur.isPresent()){
+                message.setUtilisateur(optionUtilisateur.get());
+            }
+            if(optionCanal.isPresent()){
+                message.setCanal(optionCanal.get());
+            }
+
+            messageRepository.save(message);
+            MessageDTO messageDTo = MessageMapper.entityToDto(message);
+
+            return messageDTo;
         }
         return null;
     }
@@ -72,10 +89,20 @@ public class MessageService {
         return false;
     }
 
-    public boolean champsVidePost(MessageDTO messageDTO) {
-        if (messageDTO.getContenuMessage() == null || messageDTO.getIdCanal() == null || messageDTO.getIdUtilisateur() == null) {
-            return true;
+    public List<String> champsVidePost(MessageDTO messageDTO) {
+        List<String> champsManquants = new ArrayList<>();
+
+        if (messageDTO.getContenuMessage() == null) {
+            champsManquants.add("contenuMessage");
         }
-        return false;
+
+        if (messageDTO.getIdCanal() == null) {
+            champsManquants.add("idCanal");
+        }
+
+        if (messageDTO.getIdUtilisateur() == null) {
+            champsManquants.add("idUtilisateur");
+        }
+        return champsManquants;
     }
 }
