@@ -1,15 +1,13 @@
 package backend.Projetcertification.service;
 
 import backend.Projetcertification.dto.UtilisateurDTO;
-import backend.Projetcertification.dto.UtilisateurPutDto;
+import backend.Projetcertification.dto.UtilisateurPutDTO;
 import backend.Projetcertification.dto.mapper.UtilisateurMapper;
 import backend.Projetcertification.entity.Utilisateur;
 import backend.Projetcertification.repository.UtilisateurRepository;
-import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,20 +27,28 @@ public class UtilisateurService {
 
     public UtilisateurDTO addUtilisateur(UtilisateurDTO utilisateurDTO) {
         Utilisateur utilisateur = UtilisateurMapper.dtoToEntity(utilisateurDTO);
-        utilisateurRepository.save(utilisateur);
+        boolean pseudoExistant = cherchePseudo(utilisateurDTO);
+        if (!pseudoExistant) {
+            utilisateurRepository.save(utilisateur);
+        }
         return utilisateurDTO;
     }
 
-    public UtilisateurDTO updateUtilisateur(UtilisateurPutDto newUtilisateurPutDto, Integer id) {
+    public UtilisateurDTO updateUtilisateur(UtilisateurPutDTO newUtilisateurPutDto, Integer id) {
         Optional<Utilisateur> op = getUtilisateurById(id);
         if (op.isPresent()) {
             Utilisateur utilisateur = op.get();
             utilisateur.setNotNull(newUtilisateurPutDto);
 
-            utilisateurRepository.save(utilisateur);
+            UtilisateurDTO utilisateurDto = UtilisateurMapper.entityToDto(utilisateur);
+            boolean pseudoExistant = cherchePseudo(utilisateurDto);
+
+            if (!pseudoExistant) {
+                utilisateurRepository.save(utilisateur);
+            }
+
             // Convertir le putDto de l'utilisateur modifier en dto normal,pour afficher que le pseudo et non l'id avec
-            UtilisateurDTO utilisateurDTO = UtilisateurMapper.putDtoToDto(newUtilisateurPutDto);
-            return utilisateurDTO;
+            return UtilisateurMapper.entityToDto(utilisateur);
         }
         return null;
     }
@@ -62,4 +68,12 @@ public class UtilisateurService {
         return false;
     }
 
+    public boolean cherchePseudo(UtilisateurDTO newUtilisateurDTO) {
+        for (Utilisateur utilisateur : getUtilisateurs()) {
+            if (utilisateur.getPseudo().equals(newUtilisateurDTO.getPseudo())) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

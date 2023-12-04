@@ -1,7 +1,7 @@
 package backend.Projetcertification.dto.mapper;
 
 import backend.Projetcertification.dto.UtilisateurDTO;
-import backend.Projetcertification.dto.UtilisateurPutDto;
+import backend.Projetcertification.dto.UtilisateurPutDTO;
 import backend.Projetcertification.entity.Utilisateur;
 
 public class UtilisateurMapper {
@@ -21,7 +21,7 @@ public class UtilisateurMapper {
     }
 
     // Convertir le dto put de l'utilisateur (avec l'id) en dto de l'utilisateur (sans l'id)
-    public static UtilisateurDTO putDtoToDto(UtilisateurPutDto entity) {
+    public static UtilisateurDTO putDtoToDto(UtilisateurPutDTO entity) {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
         utilisateurDTO.setPseudo(entity.getPseudo());
         return utilisateurDTO;

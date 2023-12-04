@@ -1,8 +1,9 @@
 package backend.Projetcertification.dto;
 
-public class UtilisateurPutDto {
+public class UtilisateurPutDTO {
     private Integer id;
     private String pseudo;
+
 
     public Integer getId() {
         return id;
