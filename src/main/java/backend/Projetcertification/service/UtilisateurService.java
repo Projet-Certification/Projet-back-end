@@ -21,6 +21,7 @@ public class UtilisateurService {
         return utilisateurRepository.findAll();
     }
 
+
     public Optional<Utilisateur> getUtilisateurById(Integer id) {
         return utilisateurRepository.findById(id);
     }
@@ -35,6 +36,7 @@ public class UtilisateurService {
     }
 
     public UtilisateurDTO updateUtilisateur(UtilisateurPutDTO newUtilisateurPutDto, Integer id) {
+
         Optional<Utilisateur> op = getUtilisateurById(id);
         if (op.isPresent()) {
             Utilisateur utilisateur = op.get();
@@ -47,7 +49,7 @@ public class UtilisateurService {
                 utilisateurRepository.save(utilisateur);
             }
 
-            // Convertir le putDto de l'utilisateur modifier en dto normal,pour afficher que le pseudo et non l'id avec
+            // Retourne le putDto de l'utilisateur modifier en dto normal, pour afficher que le pseudo et non l'id avec
             return UtilisateurMapper.entityToDto(utilisateur);
         }
         return null;
