@@ -23,8 +23,9 @@ public class CanalController {
 
     @Autowired
     CanalService canalService;
+
     @GetMapping
-    public ResponseEntity<List<CanalDTO>> findAllCanal(){
+    public ResponseEntity<List<CanalDTO>> findAllCanal() {
         List<Canal> canals = canalService.getCanaux();
         List<CanalDTO> canalDTOS = new ArrayList<>();
 
@@ -34,17 +35,19 @@ public class CanalController {
         }
         return ResponseEntity.ok(canalDTOS);
     }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> addCanal(@RequestBody CanalDTO newCanal) {
-        if (canalService.champsVidePost(newCanal)){
+        if (canalService.champsVidePost(newCanal)) {
             return ResponseEntity.badRequest().body("Le pseudo n'a pas été rempli");
         }
-      CanalDTO canalDTO =  canalService.addCanal(newCanal);
-        return ResponseEntity.ok(canalDTO) ;
+        CanalDTO canalDTO = canalService.addCanal(newCanal);
+        return ResponseEntity.ok(canalDTO);
     }
+
     @GetMapping("{id}")
-    public ResponseEntity <?> findCanalById(@PathVariable Integer id) {
+    public ResponseEntity<?> findCanalById(@PathVariable Integer id) {
         Optional<Canal> optional = canalService.getCanalById(id);
         if (optional.isPresent()) {
             CanalDTO canal = CanalMapper.entityToDto(optional.get());
@@ -52,6 +55,7 @@ public class CanalController {
         } else
             return ResponseEntity.status(404).body("L'utilisateur est inexistant");
     }
+
     @PatchMapping("{id}")
     public ResponseEntity<?> updateCanal(@RequestBody Canal CanalPatch, @PathVariable Integer id) {
 
@@ -62,13 +66,21 @@ public class CanalController {
         if (optional.isEmpty()) {
             return ResponseEntity.status(404).body("Le canal est inexistant");
         }
-        Canal utilisateurDto = canalService.updateCanal(CanalPatch);
-        if (CanalPatch != null) {
-            return ResponseEntity.ok(utilisateurDto);
+        if (optional.isPresent()) {
+            Canal canal = optional.get();
+            if (canal.isEstGeneral()) {
+                return ResponseEntity.status(404).body("Vous ne pouvez pas modifier le canal général");
+            }
+        }
+
+        CanalDTO canalDTO = canalService.updateCanal(CanalPatch);
+        if (canalDTO != null) {
+            return ResponseEntity.ok(canalDTO);
         } else {
             return ResponseEntity.status(404).body("Le canal a modifier n'a pas été trouver");
         }
     }
+
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteCanal(@PathVariable("id") Integer id) {
         if (canalService.deleteCanal(id) != null) {
