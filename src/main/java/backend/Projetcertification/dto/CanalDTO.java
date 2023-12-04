@@ -5,13 +5,8 @@ import jakarta.persistence.Column;
 public class CanalDTO {
 
 
-
-
     private boolean estLeGeneral;
-
     private boolean estActif;
-
-
     private String nomCanal;
 
     public boolean isEstLeGeneral() {

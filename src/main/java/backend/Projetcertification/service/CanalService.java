@@ -15,56 +15,49 @@ import java.util.Optional;
 public class CanalService {
     @Autowired
     CanalRepository canalRepository;
-    public List<Canal> getCanaux(){
+
+    public List<Canal> getCanaux() {
         return canalRepository.findAll();
     }
-    public Optional<Canal> getCanalById(Integer id){
+
+    public Optional<Canal> getCanalById(Integer id) {
         return canalRepository.findById(id);
     }
-    public CanalDTO addCanal(CanalDTO canal){
+
+    public CanalDTO addCanal(CanalDTO canal) {
         Canal canalToEntity = CanalMapper.dtoToEntity(canal);
         if (getCanaux().isEmpty()) {
             canalToEntity.setEstGeneral(true);
         }
         canalRepository.save(canalToEntity);
-       return CanalMapper.entityToDto(canalToEntity);
+        return CanalMapper.entityToDto(canalToEntity);
     }
 
-
-
-    public Canal updateCanal(Canal canal) {
-       return canalRepository.save(canal);
+    public CanalDTO updateCanal(Canal canal) {
+        if (!canal.isEstGeneral()) {
+            canalRepository.save(canal);
+        }
+        return CanalMapper.entityToDto(canal);
     }
 
     public Canal deleteCanal(Integer id) {
         Optional<Canal> find = canalRepository.findById(id);
         if (find.isPresent()) {
             Canal canal = find.get();
-            canalRepository.deleteById(canal.getId());
+            if (!canal.isEstGeneral()) {
+                canalRepository.deleteById(canal.getId());
+            }
             return canal;
         }
         return null;
 
     }
-    public boolean champsVidePost(CanalDTO  canalDTO) {
+
+    public boolean champsVidePost(CanalDTO canalDTO) {
         if (canalDTO.getNomCanal() == null || canalDTO.getNomCanal().isBlank()) {
             return true;
         }
         return false;
     }
 
-    /*public void general(Integer id) {
-        Optional<Canal> optionalCanal = canalRepository.findById(id);
-        optionalCanal.ifPresent(canal -> {
-            if (!canal.isEstGeneral() ){
-                canalRepository.save(canal);
-            }
-        });
-    }*/
-    public void general(Canal canal) {
-        if (getCanaux().isEmpty()) {
-            canal.setEstGeneral(true);
-        }
-        canalRepository.save(canal);
-    }
 }
