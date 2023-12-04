@@ -5,6 +5,7 @@ import backend.Projetcertification.dto.UtilisateurDTO;
 import backend.Projetcertification.dto.mapper.CanalMapper;
 import backend.Projetcertification.dto.mapper.UtilisateurMapper;
 import backend.Projetcertification.entity.Canal;
+import backend.Projetcertification.entity.Message;
 import backend.Projetcertification.entity.Utilisateur;
 import backend.Projetcertification.service.CanalService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +30,16 @@ public class CanalController {
         List<Canal> canals = canalService.getCanaux();
         List<CanalDTO> canalDTOS = new ArrayList<>();
 
+
         for (Canal entity : canals) {
             CanalDTO canalsDto = CanalMapper.entityToDto(entity);
+            List<String> listeContenuMessages = new ArrayList<>();
+            for (Message message : entity.getMessages()) {
+                canalsDto.setHeureMessage(message.getDateMessage());
+                canalsDto.setPseudoUtilisateur(message.getUtilisateur().getPseudo());
+                listeContenuMessages.add(message.getContenuMessage());
+            }
+            canalsDto.setListContenuMessage(listeContenuMessages);
             canalDTOS.add(canalsDto);
         }
         return ResponseEntity.ok(canalDTOS);
