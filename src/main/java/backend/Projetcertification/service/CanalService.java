@@ -34,6 +34,8 @@ public class CanalService {
         Canal canalToEntity = CanalMapper.dtoToEntity(canal);
         if (getCanaux().isEmpty()) {
             canalToEntity.setEstGeneral(true);
+        }else{
+            canalToEntity.setEstGeneral(false);
         }
         canalRepository.save(canalToEntity);
         return CanalMapper.entityToDto(canalToEntity);
