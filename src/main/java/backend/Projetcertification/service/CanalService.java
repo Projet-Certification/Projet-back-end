@@ -1,5 +1,8 @@
 package backend.Projetcertification.service;
 
+import backend.Projetcertification.dto.CanalDTO;
+import backend.Projetcertification.dto.UtilisateurDTO;
+import backend.Projetcertification.dto.mapper.CanalMapper;
 import backend.Projetcertification.entity.Canal;
 import backend.Projetcertification.repository.CanalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +21,9 @@ public class CanalService {
     public Optional<Canal> getCanalById(Integer id){
         return canalRepository.findById(id);
     }
-    public void addCanal(Canal canal){
-        canalRepository.save(canal);
+    public CanalDTO addCanal(CanalDTO canal){
+        canalRepository.save(CanalMapper.dtoToEntity(canal));
+        return canal;
     }
     public Canal updateCanal(Canal canal) {
        return canalRepository.save(canal);
@@ -34,5 +38,26 @@ public class CanalService {
         }
         return null;
 
+    }
+    public boolean champsVidePost(CanalDTO  canalDTO) {
+        if (canalDTO.getNomCanal() == null || canalDTO.getNomCanal().isBlank()) {
+            return true;
+        }
+        return false;
+    }
+
+    /*public void general(Integer id) {
+        Optional<Canal> optionalCanal = canalRepository.findById(id);
+        optionalCanal.ifPresent(canal -> {
+            if (!canal.isEstGeneral() ){
+                canalRepository.save(canal);
+            }
+        });
+    }*/
+    public void addCanal(Canal canal) {
+        if (getCanaux().isEmpty()) {
+            canal.setEstGeneral(true);
+        }
+        canalRepository.save(canal);
     }
 }
