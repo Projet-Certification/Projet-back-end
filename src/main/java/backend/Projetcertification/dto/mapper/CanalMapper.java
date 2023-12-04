@@ -2,10 +2,8 @@ package backend.Projetcertification.dto.mapper;
 
 import backend.Projetcertification.dto.CanalDTO;
 import backend.Projetcertification.dto.CanalPutDto;
-import backend.Projetcertification.dto.UtilisateurDTO;
-import backend.Projetcertification.dto.UtilisateurPutDto;
 import backend.Projetcertification.entity.Canal;
-import backend.Projetcertification.entity.Utilisateur;
+
 
 public class CanalMapper {
     public static CanalDTO entityToDto(Canal entity) {

@@ -22,9 +22,16 @@ public class CanalService {
         return canalRepository.findById(id);
     }
     public CanalDTO addCanal(CanalDTO canal){
-        canalRepository.save(CanalMapper.dtoToEntity(canal));
-        return canal;
+        Canal canalToEntity = CanalMapper.dtoToEntity(canal);
+        if (getCanaux().isEmpty()) {
+            canalToEntity.setEstGeneral(true);
+        }
+        CanalDTO canalToDTO = CanalMapper.
+       return canalRepository.save(canalToEntity);
     }
+
+
+
     public Canal updateCanal(Canal canal) {
        return canalRepository.save(canal);
     }
@@ -54,7 +61,7 @@ public class CanalService {
             }
         });
     }*/
-    public void addCanal(Canal canal) {
+    public void general(Canal canal) {
         if (getCanaux().isEmpty()) {
             canal.setEstGeneral(true);
         }
