@@ -2,12 +2,28 @@ package backend.Projetcertification.dto;
 
 import jakarta.persistence.Column;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 public class CanalDTO {
 
 
     private boolean estLeGeneral;
     private boolean estActif;
     private String nomCanal;
+    private List<CanalGetMessagesDTO> listContenuMessage;
+
+    public List<CanalGetMessagesDTO> getListContenuMessage() {
+        return listContenuMessage;
+    }
+
+    public void setListContenuMessage(List<CanalGetMessagesDTO> listContenuMessage) {
+        this.listContenuMessage = listContenuMessage;
+    }
 
     public boolean isEstLeGeneral() {
         return estLeGeneral;
@@ -32,4 +48,6 @@ public class CanalDTO {
     public void setNomCanal(String nomCanal) {
         this.nomCanal = nomCanal;
     }
+
+
 }

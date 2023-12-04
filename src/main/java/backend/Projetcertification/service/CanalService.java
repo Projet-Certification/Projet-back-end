@@ -1,13 +1,17 @@
 package backend.Projetcertification.service;
 
 import backend.Projetcertification.dto.CanalDTO;
+import backend.Projetcertification.dto.CanalPutDto;
 import backend.Projetcertification.dto.UtilisateurDTO;
 import backend.Projetcertification.dto.mapper.CanalMapper;
 import backend.Projetcertification.entity.Canal;
+import backend.Projetcertification.entity.Message;
 import backend.Projetcertification.repository.CanalRepository;
+import backend.Projetcertification.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.print.DocFlavor;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,6 +19,8 @@ import java.util.Optional;
 public class CanalService {
     @Autowired
     CanalRepository canalRepository;
+    @Autowired
+    MessageRepository messageRepository;
 
     public List<Canal> getCanaux() {
         return canalRepository.findAll();
@@ -33,11 +39,19 @@ public class CanalService {
         return CanalMapper.entityToDto(canalToEntity);
     }
 
-    public CanalDTO updateCanal(Canal canal) {
-        if (!canal.isEstGeneral()) {
-            canalRepository.save(canal);
+    public CanalPutDto updateCanal(CanalPutDto canalPutDto, Integer id) {
+        Optional<Canal> op = getCanalById(id);
+        if (op.isPresent()) {
+
+            Canal canal = op.get();
+            canal.setNotNull(canalPutDto);
+
+            if (!canalPutDto.isEstLeGeneral()) {
+                canalRepository.save(canal);
+            }
+            return canalPutDto;
         }
-        return CanalMapper.entityToDto(canal);
+        return null;
     }
 
     public Canal deleteCanal(Integer id) {

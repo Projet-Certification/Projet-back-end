@@ -1,5 +1,6 @@
 package backend.Projetcertification.entity;
 
+import backend.Projetcertification.dto.CanalPutDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -74,8 +75,18 @@ public class Canal {
     public void setMessages(List<Message> messages) {
         this.messages = messages;
     }
+
     public void addMessage(Message message) {
         messages.add(message);
         message.setCanal(this);
+    }
+
+    public void setNotNull(CanalPutDto canalPutDto) {
+        if (!canalPutDto.isEstLeGeneral()) {
+            if (canalPutDto.getNomCanal() != null) {
+                this.nomCanal = canalPutDto.getNomCanal();
+            }
+            this.estActif = canalPutDto.isEstActif();
+        }
     }
 }
