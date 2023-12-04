@@ -15,15 +15,13 @@ public class CanalDTO {
     private boolean estLeGeneral;
     private boolean estActif;
     private String nomCanal;
-    private List<String> listContenuMessage;
-    private String pseudoUtilisateur;
-    private String heureMessage;
+    private List<CanalGetMessagesDTO> listContenuMessage;
 
-    public List<String> getListContenuMessage() {
+    public List<CanalGetMessagesDTO> getListContenuMessage() {
         return listContenuMessage;
     }
 
-    public void setListContenuMessage(List<String> listContenuMessage) {
+    public void setListContenuMessage(List<CanalGetMessagesDTO> listContenuMessage) {
         this.listContenuMessage = listContenuMessage;
     }
 
@@ -51,22 +49,5 @@ public class CanalDTO {
         this.nomCanal = nomCanal;
     }
 
-    public String getPseudoUtilisateur() {
-        return pseudoUtilisateur;
-    }
 
-    public void setPseudoUtilisateur(String pseudoUtilisateur) {
-        this.pseudoUtilisateur = pseudoUtilisateur;
-    }
-
-    public String getHeureMessage() {
-        return heureMessage;
-    }
-
-    public void setHeureMessage(LocalDateTime heureMessage) {
-        if (heureMessage != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE d MMMM", Locale.FRENCH);
-            this.heureMessage = heureMessage.format(formatter);
-        }
-    }
 }

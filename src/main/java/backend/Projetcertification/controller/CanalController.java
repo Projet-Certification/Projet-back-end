@@ -1,7 +1,10 @@
 package backend.Projetcertification.controller;
 
 import backend.Projetcertification.dto.CanalDTO;
+import backend.Projetcertification.dto.CanalGetMessagesDTO;
+import backend.Projetcertification.dto.CanalPutDto;
 import backend.Projetcertification.dto.UtilisateurDTO;
+import backend.Projetcertification.dto.mapper.CanalGetMessageMapper;
 import backend.Projetcertification.dto.mapper.CanalMapper;
 import backend.Projetcertification.dto.mapper.UtilisateurMapper;
 import backend.Projetcertification.entity.Canal;
@@ -30,17 +33,17 @@ public class CanalController {
         List<Canal> canals = canalService.getCanaux();
         List<CanalDTO> canalDTOS = new ArrayList<>();
 
-
         for (Canal entity : canals) {
-            CanalDTO canalsDto = CanalMapper.entityToDto(entity);
-            List<String> listeContenuMessages = new ArrayList<>();
+            List<CanalGetMessagesDTO> listeMessagesDTO  = new ArrayList<>();
+
             for (Message message : entity.getMessages()) {
-                canalsDto.setHeureMessage(message.getDateMessage());
-                canalsDto.setPseudoUtilisateur(message.getUtilisateur().getPseudo());
-                listeContenuMessages.add(message.getContenuMessage());
+                CanalGetMessagesDTO canalGetMessagesDto = CanalGetMessageMapper.entityToDto(message);
+
+                listeMessagesDTO.add(canalGetMessagesDto);
             }
-            canalsDto.setListContenuMessage(listeContenuMessages);
-            canalDTOS.add(canalsDto);
+            CanalDTO canalDto = CanalMapper.entityToDto(entity);
+            canalDto.setListContenuMessage(listeMessagesDTO);
+            canalDTOS.add(canalDto);
         }
         return ResponseEntity.ok(canalDTOS);
     }
@@ -52,6 +55,8 @@ public class CanalController {
             return ResponseEntity.badRequest().body("Le pseudo n'a pas été rempli");
         }
         CanalDTO canalDTO = canalService.addCanal(newCanal);
+
+        //Convertir le dto en putDto pour ne
         return ResponseEntity.ok(canalDTO);
     }
 
@@ -59,14 +64,26 @@ public class CanalController {
     public ResponseEntity<?> findCanalById(@PathVariable Integer id) {
         Optional<Canal> optional = canalService.getCanalById(id);
         if (optional.isPresent()) {
-            CanalDTO canal = CanalMapper.entityToDto(optional.get());
-            return ResponseEntity.ok(canal);
+            Canal canal = optional.get();
+            CanalDTO canalDto = CanalMapper.entityToDto(canal);
+
+            if(!canal.getMessages().isEmpty()){
+                List<CanalGetMessagesDTO> listeMessagesDTO  = new ArrayList<>();
+
+                for (Message message : canal.getMessages()) {
+                    CanalGetMessagesDTO canalGetMessagesDto = CanalGetMessageMapper.entityToDto(message);
+                    listeMessagesDTO.add(canalGetMessagesDto);
+                }
+
+                canalDto.setListContenuMessage(listeMessagesDTO);
+            }
+            return ResponseEntity.ok(canalDto);
         } else
             return ResponseEntity.status(404).body("L'utilisateur est inexistant");
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<?> updateCanal(@RequestBody Canal CanalPatch, @PathVariable Integer id) {
+    public ResponseEntity<?> updateCanal(@RequestBody CanalPutDto CanalPatch, @PathVariable Integer id) {
 
         if (!CanalPatch.getId().equals(id))
             return ResponseEntity.status(404).body("L'id de l'url est différente de celle envoyer dans le body");
@@ -82,9 +99,9 @@ public class CanalController {
             }
         }
 
-        CanalDTO canalDTO = canalService.updateCanal(CanalPatch);
-        if (canalDTO != null) {
-            return ResponseEntity.ok(canalDTO);
+        CanalPutDto canalPutDto = canalService.updateCanal(CanalPatch,id);
+        if (canalPutDto != null) {
+            return ResponseEntity.ok(canalPutDto);
         } else {
             return ResponseEntity.status(404).body("Le canal a modifier n'a pas été trouver");
         }
