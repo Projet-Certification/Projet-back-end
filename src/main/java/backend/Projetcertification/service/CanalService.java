@@ -45,4 +45,19 @@ public class CanalService {
         }
         return false;
     }
+
+    /*public void general(Integer id) {
+        Optional<Canal> optionalCanal = canalRepository.findById(id);
+        optionalCanal.ifPresent(canal -> {
+            if (!canal.isEstGeneral() ){
+                canalRepository.save(canal);
+            }
+        });
+    }*/
+    public void addCanal(Canal canal) {
+        if (getCanaux().isEmpty()) {
+            canal.setEstGeneral(true);
+        }
+        canalRepository.save(canal);
+    }
 }
