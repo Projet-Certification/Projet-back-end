@@ -13,6 +13,7 @@ public class MessageMapper {
 
         messageDTO.setContenuMessage(entity.getContenuMessage());
         messageDTO.setDateMessage(entity.getDateMessage());
+        messageDTO.setHeureMessage(entity.getDateMessage());
         messageDTO.setIdCanal(entity.getCanal().getId());
         messageDTO.setIdUtilisateur(entity.getUtilisateur().getId());
 

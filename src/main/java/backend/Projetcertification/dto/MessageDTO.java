@@ -8,6 +8,7 @@ public class MessageDTO {
 
     private String contenuMessage;
     private String dateMessage;
+    private String heureMessage;
     private Integer idUtilisateur;
     private Integer idCanal;
 
@@ -27,6 +28,17 @@ public class MessageDTO {
         if (dateMessage != null) {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE d MMMM", Locale.FRENCH);
             this.dateMessage = dateMessage.format(formatter);
+        }
+    }
+
+    public String getHeureMessage() {
+        return heureMessage;
+    }
+
+    public void setHeureMessage(LocalDateTime heureMessage) {
+        if (heureMessage != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            this.heureMessage = heureMessage.format(formatter);
         }
     }
 

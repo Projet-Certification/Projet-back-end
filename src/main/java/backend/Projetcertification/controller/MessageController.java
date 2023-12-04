@@ -27,9 +27,12 @@ public class MessageController {
         List<MessageDTO> messageDTOS = new ArrayList<>();
 
         for (Message entity : messages) {
-            MessageDTO messageDTO = MessageMapper.entityToDto(entity);
-            messageDTOS.add(messageDTO);
+            if (entity.getUtilisateur().isActif()) {
+                MessageDTO messageDTO = MessageMapper.entityToDto(entity);
+                messageDTOS.add(messageDTO);
+            }
         }
+
         return ResponseEntity.ok(messageDTOS);
     }
 
@@ -38,9 +41,13 @@ public class MessageController {
 
         Optional<Message> optionalMessage = messageService.getMessageById(id);
         if (optionalMessage.isPresent()) {
-            MessageDTO messageDTO = MessageMapper.entityToDto(optionalMessage.get());
-
-            return ResponseEntity.ok(messageDTO);
+            if (optionalMessage.get().getUtilisateur().isActif()) {
+                MessageDTO messageDTO = MessageMapper.entityToDto(optionalMessage.get());
+                return ResponseEntity.ok(messageDTO);
+            } else {
+                return ResponseEntity.status(404).body("L'utilisateur est desactivé, vous ne pouvez pas voir ce " +
+                        "message");
+            }
         } else {
             return ResponseEntity.status(404).body("Le message est inexistant");
         }
@@ -66,9 +73,22 @@ public class MessageController {
         if (!messageService.getMessageById(id).isPresent()) {
             return ResponseEntity.status(404).body("Le message est inexistant");
         }
+        List<String> champsManquants = messageService.champsVidePut(messagePutDTO);
+        if (!champsManquants.isEmpty()) {
+            return ResponseEntity.badRequest().body("L'un des champs n'a pas été rempli " + champsManquants);
+        }
 
-        MessageDTO messageDTO = messageService.updateMessage(messagePutDTO, id);
-        return ResponseEntity.ok(messageDTO);
+        if(messageService.updateMessageUtilisateurDifferennt(messagePutDTO)){
+            return ResponseEntity.badRequest().body("Vous ne pouvez pas modifier le message, vous n'êtes pas " +
+                    "l'utilisateur lié à ce message");
+        }
+
+        MessageDTO messageDTO = messageService.updateMessage(messagePutDTO);
+        if (messageDTO != null) {
+            return ResponseEntity.ok(messageDTO);
+        } else {
+            return ResponseEntity.badRequest().body("Une erreur c'est produite");
+        }
     }
 
     @DeleteMapping("{id}")

@@ -36,15 +36,16 @@ public class MessageService {
     public MessageDTO addMessage(MessageDTO newMessageDTO) {
         // Conversion du dto en entité Message
         Message message = MessageMapper.dtoToEntity(newMessageDTO);
+
         // Entité Utilisateur
         Optional<Utilisateur> optionUtilisateur = utilisateurService.getUtilisateurById(newMessageDTO.getIdUtilisateur());
         // Entité Canal
         Optional<Canal> optionCanal = canalService.getCanalById(newMessageDTO.getIdCanal());
 
-        if(optionUtilisateur.isPresent()){
+        if (optionUtilisateur.isPresent()) {
             message.setUtilisateur(optionUtilisateur.get());
         }
-        if(optionCanal.isPresent()){
+        if (optionCanal.isPresent()) {
             message.setCanal(optionCanal.get());
         }
 
@@ -55,22 +56,16 @@ public class MessageService {
         return messageDto;
     }
 
-    public MessageDTO updateMessage(MessagePutDTO newMessagePutDto, Integer id) {
-        Optional<Message> op = getMessageById(id);
+    public MessageDTO updateMessage(MessagePutDTO newMessagePutDto) {
+        Optional<Message> op = getMessageById(newMessagePutDto.getId());
         if (op.isPresent()) {
             Message message = op.get();
-            message.setNotNull(newMessagePutDto);
-
             // Entité Utilisateur
             Optional<Utilisateur> optionUtilisateur = utilisateurService.getUtilisateurById(newMessagePutDto.getIdUtilisateur());
-            // Entité Canal
-            Optional<Canal> optionCanal = canalService.getCanalById(newMessagePutDto.getIdCanal());
+            if (optionUtilisateur.isPresent() && message.getUtilisateur().getPseudo().equals(optionUtilisateur.get().getPseudo())) {
+                message.setNotNull(newMessagePutDto);
 
-            if(optionUtilisateur.isPresent()){
                 message.setUtilisateur(optionUtilisateur.get());
-            }
-            if(optionCanal.isPresent()){
-                message.setCanal(optionCanal.get());
             }
 
             messageRepository.save(message);
@@ -79,6 +74,19 @@ public class MessageService {
             return messageDTo;
         }
         return null;
+    }
+
+    public boolean updateMessageUtilisateurDifferennt(MessagePutDTO newMessagePutDto) {
+
+        Optional<Message> op = getMessageById(newMessagePutDto.getId());
+        if (op.isPresent()) {
+            Message message = op.get();
+            Optional<Utilisateur> optionUtilisateur = utilisateurService.getUtilisateurById(newMessagePutDto.getIdUtilisateur());
+            if (optionUtilisateur.isPresent() && !message.getUtilisateur().getPseudo().equals(optionUtilisateur.get().getPseudo())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean deleteMessage(Integer id) {
@@ -101,6 +109,19 @@ public class MessageService {
         }
 
         if (messageDTO.getIdUtilisateur() == null) {
+            champsManquants.add("idUtilisateur");
+        }
+        return champsManquants;
+    }
+
+    public List<String> champsVidePut(MessagePutDTO messagePutDTO) {
+        List<String> champsManquants = new ArrayList<>();
+
+        if (messagePutDTO.getContenuMessage() == null) {
+            champsManquants.add("contenuMessage");
+        }
+
+        if (messagePutDTO.getIdUtilisateur() == null) {
             champsManquants.add("idUtilisateur");
         }
         return champsManquants;

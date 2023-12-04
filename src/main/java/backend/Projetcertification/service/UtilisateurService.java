@@ -5,6 +5,7 @@ import backend.Projetcertification.dto.UtilisateurPutDTO;
 import backend.Projetcertification.dto.mapper.UtilisateurMapper;
 import backend.Projetcertification.entity.Utilisateur;
 import backend.Projetcertification.repository.UtilisateurRepository;
+import jdk.jshell.execution.Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,8 +57,14 @@ public class UtilisateurService {
     }
 
     public boolean deleteUtilisateur(Integer id) {
-        if (getUtilisateurById(id).isPresent()) {
-            utilisateurRepository.deleteById(id);
+        Optional<Utilisateur> optionalUtilisateur = getUtilisateurById(id);
+
+        if (optionalUtilisateur.isPresent()) {
+            Utilisateur utilisateur = optionalUtilisateur.get();
+            // Ajout du boolean actif a false pour le desactiver
+            utilisateur.setActif(false);
+            utilisateurRepository.save(utilisateur);
+
             return true;
         }
         return false;
