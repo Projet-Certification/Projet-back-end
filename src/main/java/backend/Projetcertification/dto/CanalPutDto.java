@@ -4,10 +4,9 @@ public class CanalPutDto {
 
     private Integer id;
     private boolean estLeGeneral;
-
     private boolean estActif;
-
     private String nomCanal;
+
 
     public Integer getId() {
         return id;

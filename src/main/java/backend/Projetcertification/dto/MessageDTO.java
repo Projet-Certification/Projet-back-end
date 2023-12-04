@@ -1,11 +1,13 @@
 package backend.Projetcertification.dto;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class MessageDTO {
 
     private String contenuMessage;
-    private LocalDateTime dateMessage;
+    private String dateMessage;
     private Integer idUtilisateur;
     private Integer idCanal;
 
@@ -17,12 +19,15 @@ public class MessageDTO {
         this.contenuMessage = contenuMessage;
     }
 
-    public LocalDateTime getDateMessage() {
+    public String getDateMessage() {
         return dateMessage;
     }
 
     public void setDateMessage(LocalDateTime dateMessage) {
-        this.dateMessage = dateMessage;
+        if (dateMessage != null) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEEE d MMMM", Locale.FRENCH);
+            this.dateMessage = dateMessage.format(formatter);
+        }
     }
 
     public Integer getIdUtilisateur() {
