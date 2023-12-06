@@ -20,7 +20,6 @@ public class MessageMapper {
         return messageDTO;
     }
 
-    //Convertir le dto en entité
     public static Message dtoToEntity(MessageDTO messageDTO) {
         Message message = new Message();
 

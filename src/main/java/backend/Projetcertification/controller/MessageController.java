@@ -1,3 +1,4 @@
+
 package backend.Projetcertification.controller;
 
 import backend.Projetcertification.dto.MessageDTO;
@@ -27,10 +28,10 @@ public class MessageController {
         List<MessageDTO> messageDTOS = new ArrayList<>();
 
         for (Message entity : messages) {
-            if (entity.getUtilisateur().isActif()) {
-                MessageDTO messageDTO = MessageMapper.entityToDto(entity);
-                messageDTOS.add(messageDTO);
-            }
+//            if (entity.getUtilisateur().isActif()) {
+            MessageDTO messageDTO = MessageMapper.entityToDto(entity);
+//            }
+            messageDTOS.add(messageDTO);
         }
 
         return ResponseEntity.ok(messageDTOS);
@@ -41,13 +42,13 @@ public class MessageController {
 
         Optional<Message> optionalMessage = messageService.getMessageById(id);
         if (optionalMessage.isPresent()) {
-            if (optionalMessage.get().getUtilisateur().isActif()) {
-                MessageDTO messageDTO = MessageMapper.entityToDto(optionalMessage.get());
-                return ResponseEntity.ok(messageDTO);
-            } else {
-                return ResponseEntity.status(404).body("L'utilisateur est desactivé, vous ne pouvez pas voir ce " +
-                        "message");
-            }
+            //if (optionalMessage.get().getUtilisateur().isActif()) {
+            MessageDTO messageDTO = MessageMapper.entityToDto(optionalMessage.get());
+            return ResponseEntity.ok(messageDTO);
+//            } else {
+//                return ResponseEntity.status(404).body("L'utilisateur est desactivé, vous ne pouvez pas voir ce " +
+//                        "message");
+//            }
         } else {
             return ResponseEntity.status(404).body("Le message est inexistant");
         }
@@ -60,8 +61,16 @@ public class MessageController {
         if (!champsManquants.isEmpty()) {
             return ResponseEntity.badRequest().body("L'un des champs n'a pas été rempli " + champsManquants);
         }
-        // Envoie en réponse le dto à nous en retour de la méthode addMessage
-        return ResponseEntity.ok(messageService.addMessage(messageDTO));
+
+        // Conversion de l'entité en DTO
+        if (messageService.addMessage(messageDTO) != null) {
+            MessageDTO messageDto = MessageMapper.entityToDto(messageService.addMessage(messageDTO));
+            return ResponseEntity.ok(messageDto);
+        }else{
+            // Envoie en réponse le dto à nous en retour de la méthode addMessage
+            return ResponseEntity.badRequest().body("Vous ne pouvez pas ajouter de message, ce compte est inactif");
+        }
+
     }
 
     @PatchMapping("{id}")
@@ -78,7 +87,7 @@ public class MessageController {
             return ResponseEntity.badRequest().body("L'un des champs n'a pas été rempli " + champsManquants);
         }
 
-        if(messageService.updateMessageUtilisateurDifferennt(messagePutDTO)){
+        if (messageService.updateMessageUtilisateurDifferent(messagePutDTO)) {
             return ResponseEntity.badRequest().body("Vous ne pouvez pas modifier le message, vous n'êtes pas " +
                     "l'utilisateur lié à ce message");
         }

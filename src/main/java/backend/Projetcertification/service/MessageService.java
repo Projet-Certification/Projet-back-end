@@ -33,7 +33,7 @@ public class MessageService {
         return messageRepository.findById(id);
     }
 
-    public MessageDTO addMessage(MessageDTO newMessageDTO) {
+    public Message addMessage(MessageDTO newMessageDTO) {
         // Conversion du dto en entité Message
         Message message = MessageMapper.dtoToEntity(newMessageDTO);
 
@@ -42,18 +42,22 @@ public class MessageService {
         // Entité Canal
         Optional<Canal> optionCanal = canalService.getCanalById(newMessageDTO.getIdCanal());
 
+        // Si l'utilisateur est present
         if (optionUtilisateur.isPresent()) {
-            message.setUtilisateur(optionUtilisateur.get());
+            Utilisateur utilisateur = optionUtilisateur.get();
+            // Si l'utilisateur est actif
+            if (utilisateur.isActif()) {
+                message.setUtilisateur(optionUtilisateur.get());
+                // Si le canal est present
+                if (optionCanal.isPresent()) {
+                    message.setCanal(optionCanal.get());
+                    // On save
+                    // Conversion de l'entité en DTO
+                    return messageRepository.save(message);
+                }
+            }
         }
-        if (optionCanal.isPresent()) {
-            message.setCanal(optionCanal.get());
-        }
-
-        Message message1 = messageRepository.save(message);
-
-        //Rénvoie du dto afin
-        MessageDTO messageDto = MessageMapper.entityToDto(message1);
-        return messageDto;
+        return null;
     }
 
     public MessageDTO updateMessage(MessagePutDTO newMessagePutDto) {
@@ -63,12 +67,15 @@ public class MessageService {
             // Entité Utilisateur
             Optional<Utilisateur> optionUtilisateur = utilisateurService.getUtilisateurById(newMessagePutDto.getIdUtilisateur());
             if (optionUtilisateur.isPresent() && message.getUtilisateur().getPseudo().equals(optionUtilisateur.get().getPseudo())) {
-                message.setNotNull(newMessagePutDto);
+                Utilisateur utilisateur = optionUtilisateur.get();
+                if(utilisateur.isActif()){
+                    message.setNotNull(newMessagePutDto);
+                    message.setUtilisateur(optionUtilisateur.get());
 
-                message.setUtilisateur(optionUtilisateur.get());
+                    messageRepository.save(message);
+                }
             }
 
-            messageRepository.save(message);
             MessageDTO messageDTo = MessageMapper.entityToDto(message);
 
             return messageDTo;
@@ -76,7 +83,7 @@ public class MessageService {
         return null;
     }
 
-    public boolean updateMessageUtilisateurDifferennt(MessagePutDTO newMessagePutDto) {
+    public boolean updateMessageUtilisateurDifferent(MessagePutDTO newMessagePutDto) {
 
         Optional<Message> op = getMessageById(newMessagePutDto.getId());
         if (op.isPresent()) {

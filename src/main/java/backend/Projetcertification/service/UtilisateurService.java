@@ -41,12 +41,13 @@ public class UtilisateurService {
         Optional<Utilisateur> op = getUtilisateurById(id);
         if (op.isPresent()) {
             Utilisateur utilisateur = op.get();
-            utilisateur.setNotNull(newUtilisateurPutDto);
 
-            UtilisateurDTO utilisateurDto = UtilisateurMapper.entityToDto(utilisateur);
-            boolean pseudoExistant = cherchePseudo(utilisateurDto);
+            // Convertir put dto en dto pour chercher si le pseudo existe en bdd
+            UtilisateurDTO utilisateurDTO = UtilisateurMapper.putDtoToDto(newUtilisateurPutDto);
+            boolean pseudoExistant = cherchePseudo(utilisateurDTO);
 
             if (!pseudoExistant) {
+                utilisateur.setNotNull(newUtilisateurPutDto);
                 utilisateurRepository.save(utilisateur);
             }
 

@@ -80,4 +80,15 @@ public class Message {
             this.contenuMessage = newMessagePutDTO.getContenuMessage();
         }
     }
+
+    @Override
+    public String toString() {
+        return "Message{" +
+                "id=" + id +
+                ", contenuMessage='" + contenuMessage + '\'' +
+                ", dateMessage=" + dateMessage +
+                ", utilisateur=" + utilisateur +
+                ", canal=" + canal +
+                '}';
+    }
 }
