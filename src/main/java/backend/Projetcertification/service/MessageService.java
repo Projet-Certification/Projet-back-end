@@ -45,7 +45,7 @@ public class MessageService {
         // Si l'utilisateur est present
         if (optionUtilisateur.isPresent()) {
             Utilisateur utilisateur = optionUtilisateur.get();
-            // Si l'utilisateur est actif
+            // Si l'utilisateur est actif ( et non desactiver )
             if (utilisateur.isActif()) {
                 message.setUtilisateur(optionUtilisateur.get());
                 // Si le canal est present
@@ -68,6 +68,7 @@ public class MessageService {
             Optional<Utilisateur> optionUtilisateur = utilisateurService.getUtilisateurById(newMessagePutDto.getIdUtilisateur());
             if (optionUtilisateur.isPresent() && message.getUtilisateur().getPseudo().equals(optionUtilisateur.get().getPseudo())) {
                 Utilisateur utilisateur = optionUtilisateur.get();
+                // Si l'utilisateur est actif -> on peut faire la modification
                 if(utilisateur.isActif()){
                     message.setNotNull(newMessagePutDto);
                     message.setUtilisateur(optionUtilisateur.get());

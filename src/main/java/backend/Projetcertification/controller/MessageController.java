@@ -28,9 +28,7 @@ public class MessageController {
         List<MessageDTO> messageDTOS = new ArrayList<>();
 
         for (Message entity : messages) {
-//            if (entity.getUtilisateur().isActif()) {
             MessageDTO messageDTO = MessageMapper.entityToDto(entity);
-//            }
             messageDTOS.add(messageDTO);
         }
 
@@ -42,13 +40,8 @@ public class MessageController {
 
         Optional<Message> optionalMessage = messageService.getMessageById(id);
         if (optionalMessage.isPresent()) {
-            //if (optionalMessage.get().getUtilisateur().isActif()) {
             MessageDTO messageDTO = MessageMapper.entityToDto(optionalMessage.get());
             return ResponseEntity.ok(messageDTO);
-//            } else {
-//                return ResponseEntity.status(404).body("L'utilisateur est desactivé, vous ne pouvez pas voir ce " +
-//                        "message");
-//            }
         } else {
             return ResponseEntity.status(404).body("Le message est inexistant");
         }
