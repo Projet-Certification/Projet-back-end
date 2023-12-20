@@ -23,6 +23,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("canals")
+@CrossOrigin(originPatterns = "*")
 public class CanalController {
 
     @Autowired
