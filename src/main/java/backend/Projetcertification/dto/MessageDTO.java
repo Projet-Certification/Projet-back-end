@@ -6,11 +6,20 @@ import java.util.Locale;
 
 public class MessageDTO {
 
+    private Integer id;
     private String contenuMessage;
     private String dateMessage;
     private String heureMessage;
     private Integer idUtilisateur;
     private Integer idCanal;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getContenuMessage() {
         return contenuMessage;

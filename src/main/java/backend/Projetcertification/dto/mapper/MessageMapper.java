@@ -11,6 +11,7 @@ public class MessageMapper {
     public static MessageDTO entityToDto(Message entity) {
         MessageDTO messageDTO = new MessageDTO();
 
+        messageDTO.setId(entity.getId());
         messageDTO.setContenuMessage(entity.getContenuMessage());
         messageDTO.setDateMessage(entity.getDateMessage());
         messageDTO.setHeureMessage(entity.getDateMessage());

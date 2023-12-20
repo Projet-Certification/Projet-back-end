@@ -12,10 +12,19 @@ import java.util.Locale;
 public class CanalDTO {
 
 
+    private Integer id;
     private boolean estLeGeneral;
     private boolean estActif;
     private String nomCanal;
     private List<CanalGetMessagesDTO> listContenuMessage;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public List<CanalGetMessagesDTO> getListContenuMessage() {
         return listContenuMessage;

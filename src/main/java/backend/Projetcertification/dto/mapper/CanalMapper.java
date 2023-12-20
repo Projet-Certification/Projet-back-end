@@ -8,6 +8,7 @@ import backend.Projetcertification.entity.Canal;
 public class CanalMapper {
     public static CanalDTO entityToDto(Canal entity) {
         CanalDTO canalDTO = new CanalDTO();
+        canalDTO.setId(entity.getId());
         canalDTO.setNomCanal(entity.getNomCanal());
         canalDTO.setEstActif(entity.isEstActif());
         canalDTO.setEstLeGeneral(entity.isEstGeneral());
