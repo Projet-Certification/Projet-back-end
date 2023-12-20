@@ -5,10 +5,19 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class CanalGetMessagesDTO {
+    private Integer id;
     private String pseudoUtilisateur;
     private String dateMessage;
     private String heureMessage;
     private String contenuMessage;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public String getPseudoUtilisateur() {
         return pseudoUtilisateur;

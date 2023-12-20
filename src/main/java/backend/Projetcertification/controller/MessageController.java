@@ -58,8 +58,7 @@ public class MessageController {
 
         // Conversion de l'entité en DTO
         if (messageService.addMessage(messageDTO) != null) {
-            MessageDTO messageDto = MessageMapper.entityToDto(messageService.addMessage(messageDTO));
-            return ResponseEntity.ok(messageDto);
+            return ResponseEntity.ok(messageDTO);
         }else{
             // Envoie en réponse le dto à nous en retour de la méthode addMessage
             return ResponseEntity.badRequest().body("Vous ne pouvez pas ajouter de message, ce compte est inactif");
