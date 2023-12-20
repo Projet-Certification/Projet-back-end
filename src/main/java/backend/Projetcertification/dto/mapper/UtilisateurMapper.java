@@ -10,6 +10,7 @@ public class UtilisateurMapper {
     // Convertir l'entité en dto
     public static UtilisateurDTO entityToDto(Utilisateur entity) {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
+        utilisateurDTO.setId(entity.getId());
         utilisateurDTO.setPseudo(entity.getPseudo());
         return utilisateurDTO;
     }

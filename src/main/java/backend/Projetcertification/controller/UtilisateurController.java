@@ -17,6 +17,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("utilisateurs")
+@CrossOrigin(originPatterns = "*")
 public class UtilisateurController {
 
 
@@ -40,9 +41,10 @@ public class UtilisateurController {
 
         Optional<Utilisateur> optionalUtilisateur = utilisateurService.getUtilisateurById(id);
         if (optionalUtilisateur.isPresent()) {
-            UtilisateurDTO utilisateurDto = UtilisateurMapper.entityToDto(optionalUtilisateur.get());
+            Utilisateur utilisateur = optionalUtilisateur.get();
+//            UtilisateurDTO utilisateurDto = UtilisateurMapper.entityToDto(optionalUtilisateur.get());
 
-            return ResponseEntity.ok(utilisateurDto);
+            return ResponseEntity.ok(utilisateur);
         } else {
             return ResponseEntity.status(404).body("L'utilisateur est inexistant");
         }
