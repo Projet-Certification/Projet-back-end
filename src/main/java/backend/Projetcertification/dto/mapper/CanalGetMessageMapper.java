@@ -12,6 +12,7 @@ public class CanalGetMessageMapper {
 
         CanalGetMessagesDTO canalGetMessagesDTO = new CanalGetMessagesDTO();
 
+        canalGetMessagesDTO.setId(message.getId());
         canalGetMessagesDTO.setPseudoUtilisateur(message.getUtilisateur().getPseudo());
         canalGetMessagesDTO.setContenuMessage(message.getContenuMessage());
         canalGetMessagesDTO.setDateMessage(message.getDateMessage());
