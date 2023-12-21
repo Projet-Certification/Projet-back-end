@@ -95,6 +95,7 @@ public class MessageController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteMessage(@PathVariable("id") Integer id) {
+
         if (messageService.deleteMessage(id)) {
             return ResponseEntity.noContent().build();
         } else {

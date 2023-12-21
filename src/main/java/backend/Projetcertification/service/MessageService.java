@@ -98,7 +98,8 @@ public class MessageService {
     }
 
     public boolean deleteMessage(Integer id) {
-        if (getMessageById(id).isPresent()) {
+        Optional<Message> op = getMessageById(id);
+        if (op.isPresent() ) {
             messageRepository.deleteById(id);
             return true;
         }
@@ -108,7 +109,7 @@ public class MessageService {
     public List<String> champsVidePost(MessageDTO messageDTO) {
         List<String> champsManquants = new ArrayList<>();
 
-        if (messageDTO.getContenuMessage() == null) {
+        if (messageDTO.getContenuMessage() == null || messageDTO.getContenuMessage().isBlank()) {
             champsManquants.add("contenuMessage");
         }
 
@@ -116,7 +117,7 @@ public class MessageService {
             champsManquants.add("idCanal");
         }
 
-        if (messageDTO.getIdUtilisateur() == null) {
+        if (messageDTO.getIdUtilisateur() == null ) {
             champsManquants.add("idUtilisateur");
         }
         return champsManquants;
