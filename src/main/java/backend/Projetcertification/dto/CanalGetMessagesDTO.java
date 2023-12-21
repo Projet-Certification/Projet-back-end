@@ -50,7 +50,7 @@ public class CanalGetMessagesDTO {
 
     public void setHeureMessage(LocalDateTime dateMessage) {
         if (dateMessage != null) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
             this.heureMessage = dateMessage.format(formatter);
         }
     }
